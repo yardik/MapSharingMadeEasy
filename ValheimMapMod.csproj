@@ -32,6 +32,7 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="Settings.cs" />
         <Compile Include="ValheimMapMod.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

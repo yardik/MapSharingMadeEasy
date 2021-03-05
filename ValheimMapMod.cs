@@ -15,7 +15,7 @@ using Debug = UnityEngine.Debug;
 
 namespace ValheimMapMod
 {
-    [BepInPlugin("yardik.ValheimMapShareMod", "Yardiks Map Sharing Mod", "1.0.0")]
+    [BepInPlugin("yardik.ValheimMapShareMod", "Yardiks Map Sharing Mod", "1.1.0")]
     public class ValheimMapMod : BaseUnityPlugin
     {
         private static ValheimMapMod context;
@@ -79,6 +79,7 @@ namespace ValheimMapMod
         {
             context = this;
             modEnabled = Config.Bind("General", "Enabled", true, "Enable this mod");
+            Settings.Init(Config);
             
             if (!modEnabled.Value)
                 return;
@@ -120,7 +121,7 @@ namespace ValheimMapMod
                 }
 
                 //Decline map data
-                if (Input.GetKeyDown(KeyCode.F8))
+                if (Input.GetKeyDown(Settings.MapSettings.RejectMapKey.Value))
                 {
                     Debug.Log($"MapSync::Declined request from {_mapSender} to merge maps.");
                     player.Message(MessageHud.MessageType.Center,
@@ -132,7 +133,7 @@ namespace ValheimMapMod
                 }
                 
                 //Accept map data
-                if (Input.GetKeyDown(KeyCode.F7))
+                if (Input.GetKeyDown(Settings.MapSettings.AcceptMapKey.Value))
                 {
                     if (_pendingMapDataToMerge != null)
                     {
@@ -150,7 +151,7 @@ namespace ValheimMapMod
                 
                 //If the minimap is open and you hit F9 - send map data via chat
                 if (!Minimap.IsOpen()) return;
-                if (Input.GetKeyDown(KeyCode.F9))
+                if (Input.GetKeyDown(Settings.MapSettings.SyncMapKey.Value))
                 {
                     Debug.Log("MapSync::Sending map to character nearby.");
                     var chars = new List<Character>();
@@ -185,7 +186,7 @@ namespace ValheimMapMod
                 {
                     var dist = DistanceXZ(sp.Pos, pin.m_pos);
                     Debug.Log($"Pin X({pin.m_name}) distance to Pin Y({sp.Name}: {dist}");
-                    return  dist < 50.0;
+                    return  dist < Settings.MapSettings.SkipPinRange.Value;
                 });
             }
             

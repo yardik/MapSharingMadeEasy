@@ -15,7 +15,7 @@ using Debug = UnityEngine.Debug;
 
 namespace ValheimMapMod
 {
-    [BepInPlugin("ckannon.ValheimMapMod", "Yardiks Map Sharing Mod", "1.0.0")]
+    [BepInPlugin("yardik.ValheimMapShareMod", "Yardiks Map Sharing Mod", "1.0.0")]
     public class ValheimMapMod : BaseUnityPlugin
     {
         private static ValheimMapMod context;

@@ -15,7 +15,7 @@ using Debug = UnityEngine.Debug;
 
 namespace ValheimMapMod
 {
-    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "1.1.1")]
+    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "1.2.0")]
     public class ValheimMapMod : BaseUnityPlugin
     {
         private static ValheimMapMod context;
@@ -140,7 +140,10 @@ namespace ValheimMapMod
                         Debug.Log($"MapSync::{_mapSender}'s map received and will be merged.");
                         player.Message(MessageHud.MessageType.Center,
                             $"You copy {_mapSender}'s map.");
-                        MergePinData(_pendingPinDataToMerge, ___m_pins, __instance);
+                        
+                        if (Settings.MapSettings.AcceptPinShares.Value)
+                            MergePinData(_pendingPinDataToMerge, ___m_pins, __instance);
+                        
                         MergeMapData(___m_explored, __instance, ___m_fogTexture);
                         _pendingMapDataToMerge = null;
                         _pendingPinDataToMerge = null;
@@ -164,7 +167,11 @@ namespace ValheimMapMod
                         Debug.Log($"MapSync::Sending map to {toPlr.GetPlayerName()}");
                         player.Message(MessageHud.MessageType.Center, $"You let {toPlrName} copy your map.");
                         var mapString = BuildMapString(___m_explored);
-                        var pinString = BuildPinString(___m_pins);
+                        var pinString = "";
+                        
+                        if (Settings.MapSettings.SendPinShares.Value)
+                            pinString = BuildPinString(___m_pins);
+                        
                         var compressedMapString = CompressString(mapString);
                         var compressedPinString = CompressString(pinString);
                         

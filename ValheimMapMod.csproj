@@ -8,7 +8,7 @@
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>ValheimStackMods</RootNamespace>
-        <AssemblyName>ValheimMapMod</AssemblyName>
+        <AssemblyName>MapSharingMadeEasy</AssemblyName>
         <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -265,7 +265,7 @@
 
     -->
     <Target Name="AfterBuild">
-        <Exec Command="copy bin\Debug\ValheimMapMod.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />
-        <Exec Command="copy bin\Debug\ValheimMapMod.dll \\Shar-pc\d\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins" />
+        <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />
+        <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll \\Shar-pc\d\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins" />
     </Target>
 </Project>

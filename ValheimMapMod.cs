@@ -15,7 +15,7 @@ using Debug = UnityEngine.Debug;
 
 namespace ValheimMapMod
 {
-    [BepInPlugin("yardik.ValheimMapShareMod", "Yardiks Map Sharing Mod", "1.1.0")]
+    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "1.1.1")]
     public class ValheimMapMod : BaseUnityPlugin
     {
         private static ValheimMapMod context;
@@ -113,7 +113,7 @@ namespace ValheimMapMod
                     {
                         Debug.Log($"MapSync::MapData Found from {_mapSender} - posting message.");
                         player.Message(MessageHud.MessageType.Center,
-                            $"{_mapSender} wants to share their map (F7 to accept, F8 to decline).");
+                            $"{_mapSender} wants to share their map ({Settings.MapSettings.AcceptMapKey.Value.ToString()} to accept, {Settings.MapSettings.RejectMapKey.Value.ToString()} to decline).");
                         _stopwatch = new Stopwatch();
                         _stopwatch.Start();
                         return;

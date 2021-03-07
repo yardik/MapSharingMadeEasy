@@ -22,10 +22,10 @@ namespace ValheimMapMod
                 SyncMapKey = config.Bind(name, "SyncMapKey", KeyCode.F9,
                     "What key to press to send map to target?");
 
-                AcceptMapKey = config.Bind(name, "AcceptMapKey", KeyCode.F9,
+                AcceptMapKey = config.Bind(name, "AcceptMapKey", KeyCode.F7,
                     "What key to press to accept a sent map?");
 
-                RejectMapKey = config.Bind(name, "RejectMapKey", KeyCode.F9,
+                RejectMapKey = config.Bind(name, "RejectMapKey", KeyCode.F8,
                     "What key to press to reject a sent map?");
 
                 SkipPinRange = config.Bind(name, "SkipPinRange", 25f,

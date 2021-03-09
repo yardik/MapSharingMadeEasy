@@ -13,6 +13,7 @@ namespace ValheimMapMod
         public class MapSettings
         {
             public static ConfigEntry<KeyCode> SyncMapKey { get; private set; }
+            public static ConfigEntry<KeyCode> SyncPinKey { get; private set; }
             public static ConfigEntry<KeyCode> AcceptMapKey { get; private set; }
             public static ConfigEntry<KeyCode> RejectMapKey { get; private set; }
             public static ConfigEntry<float> SkipPinRange { get; private set; }
@@ -26,7 +27,10 @@ namespace ValheimMapMod
                 string name = "MapSettings";
                 SyncMapKey = config.Bind(name, "SyncMapKey", KeyCode.F9,
                     "What key to press to send map to target?");
-
+                
+                SyncPinKey = config.Bind(name, "SyncPinKey", KeyCode.F10,
+                    "What key to press to send pins only to target?");
+        
                 AcceptMapKey = config.Bind(name, "AcceptMapKey", KeyCode.F7,
                     "What key to press to accept a sent map?");
 
@@ -40,7 +44,7 @@ namespace ValheimMapMod
                     "Accept pins that are shared along with exploration data. Defaults to true.");
                 
                 SendPinShares = config.Bind(name, "SendPinShares", true,
-                    "Send other players your pins, or just your exploration data. Defaults to true.");
+                    "Send other players your pins along with map data? Defaults to true.");
                 
                 Debug.Log($"Loaded settings!\nSyncMapKey: {SyncMapKey.Value}\nAcceptMapKey:{AcceptMapKey.Value}\nRejectMapKey:{RejectMapKey.Value}\nSkipPinRange:{SkipPinRange.Value}");
             }

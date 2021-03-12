@@ -4,10 +4,10 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{31B088EE-86B1-49FC-AB65-CA80C294B1C2}</ProjectGuid>
+        <ProjectGuid>{536A99F4-D96D-4FB8-9428-159D751642D2}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>ValheimStackMods</RootNamespace>
+        <RootNamespace>MapSharingMadeEasy</RootNamespace>
         <AssemblyName>MapSharingMadeEasy</AssemblyName>
         <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
@@ -32,9 +32,18 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="Map\MapData.cs" />
+        <Compile Include="Map\SavedPinData.cs" />
+        <Compile Include="Patches\Chat.cs" />
+        <Compile Include="Patches\Minimap.cs" />
+        <Compile Include="Patches\ObjectDB.cs" />
+        <Compile Include="Patches\Player.cs" />
+        <Compile Include="Patches\ZNetScene.cs" />
         <Compile Include="Settings.cs" />
-        <Compile Include="ValheimMapMod.cs" />
+        <Compile Include="MapSharingMadeEasy.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="SharedMap.cs" />
+        <Compile Include="Utils.cs" />
     </ItemGroup>
     <ItemGroup>
       <Reference Include="0Harmony, Version=2.3.2.0, Culture=neutral, PublicKeyToken=null">
@@ -289,10 +298,23 @@
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
     </Target>
-
-    -->
     <Target Name="AfterBuild">
-        <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />
-        <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll \\Shar-pc\d\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins" />
+    </Target>
+    -->
+    <!--ItemGroup>
+      <None Remove="Unity\MapSharingMadeEasy\Assets\AssetBundles\mapsharingmadeeasy" />
+    </ItemGroup-->
+  
+    <ItemGroup>
+      <EmbeddedResource Include="Unity\MapSharingMadeEasy\Assets\AssetBundles\mapsharingmadeeasy" />
+    </ItemGroup>
+  
+    <ItemGroup>
+      <Content Include=".gitignore" />
+    </ItemGroup>
+    <Target Name="AfterBuild">
+      <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Valheim_Debug\BepInEx\plugins" />
+      <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />
+      <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll \\shar-pc\D\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins" />
     </Target>
 </Project>

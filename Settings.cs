@@ -1,7 +1,7 @@
 using BepInEx.Configuration;
 using UnityEngine;
 
-namespace ValheimMapMod
+namespace MapSharingMadeEasy
 {
     public class Settings
     {

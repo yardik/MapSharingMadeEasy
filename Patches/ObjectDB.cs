@@ -9,44 +9,12 @@ namespace MapSharingMadeEasy.Patches
     {
         static void Postfix(ObjectDB __instance, Dictionary<int, GameObject> ___m_itemByHash)
         {
-            Debug.Log("Adding _mapPrefab to ObjectDB");
-            var addedInstance = false;
-
-            foreach (var instanceMItem in __instance.m_items)
+            if (__instance.m_items.Count == 0 || __instance.GetItemPrefab("Amber") == null)
             {
-                if (instanceMItem.name.Equals(SharedMap.MapPrefab.name))
-                {
-                    addedInstance = true;
-                    break;
-                }
+                Debug.Log("Waiting for game to initialize before adding prefabs.");
+                return;
             }
-
-            if (!addedInstance)
-            {
-                __instance.m_items.Add(SharedMap.MapPrefab);
-                ___m_itemByHash.Add(Utils.GetStableHashCode(SharedMap.MapPrefab.gameObject.name), SharedMap.MapPrefab.gameObject);
-            }
-
-            foreach (var instanceMItem in __instance.m_items)
-            {
-                if (!instanceMItem.name.Equals("Hammer")) continue;
-
-                var mapPrefabPiece = SharedMap.MapPrefab.GetComponent<Piece>();
-                if (mapPrefabPiece == null)
-                {
-                    Debug.Log("mapPrefab has no piece.");
-                    return;
-                }
-
-                Debug.Log("Found Hammer - Adding map recipes");
-                if (instanceMItem == null)
-                {
-                    Debug.Log("instanceMItem is null");
-                }
-
-                var itemDropHammer = instanceMItem.GetComponent<ItemDrop>();
-                Utils.AddMPieceToPieceTable(itemDropHammer.m_itemData.m_shared.m_buildPieces.m_pieces, SharedMap.MapPrefab);
-            }
+            MapSharingMadeEasy.instance.TryRegisterItems();
         }
     }
 }

@@ -574,7 +574,19 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: system_io_compression;thunderkit
+    4: system_io_compression;thunderkit
+    7: system_io_compression;thunderkit
+    13: system_io_compression;thunderkit
+    14: system_io_compression;thunderkit
+    19: system_io_compression;thunderkit
+    21: system_io_compression;thunderkit
+    25: system_io_compression;thunderkit
+    27: system_io_compression;thunderkit
+    28: system_io_compression;thunderkit
+    29: system_io_compression;thunderkit
+    30: system_io_compression;thunderkit
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

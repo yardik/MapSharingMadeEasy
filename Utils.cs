@@ -26,7 +26,6 @@ namespace MapSharingMadeEasy
             return num1 + num2 * 1566083941;
         }
         
-
         public static string DecompressString(string compressedText)
         {
             var gZipBuffer = Convert.FromBase64String(compressedText);

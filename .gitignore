@@ -1,1 +1,9 @@
-Unity/MapSharingMadeEasy/Assets/Scripts
+Libs/
+Unity/MapSharingMadeEasy/.idea/
+Unity/MapSharingMadeEasy/Library/
+Unity/MapSharingMadeEasy/Logs/
+Unity/MapSharingMadeEasy/Packages/
+Unity/MapSharingMadeEasy/UIElementsSchema/
+Unity/MapSharingMadeEasy/obj/
+bin/
+obj/

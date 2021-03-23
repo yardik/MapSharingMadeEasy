@@ -13,12 +13,19 @@ using Random = UnityEngine.Random;
 
 namespace MapSharingMadeEasy.Patches
 {
-    [HarmonyPatch(typeof(Minimap))]
-    public class HookExplore
+    [HarmonyPatch(typeof(Minimap), "OnTogglePublicPosition")]
+    static class UpdatePublicPosition_Patch
     {
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(Minimap), "Explore", new Type[] {typeof(int), typeof(int)})]
-        public static bool call_Explore(object instance, int x, int y) => throw new NotImplementedException();
+        static bool Prefix(Minimap __instance)
+        {
+            if (Settings.MapSettings.AllowPublicLocations.Value) return true;
+            if (__instance.m_publicPosition.transform.parent != null)
+                __instance.m_publicPosition.transform.parent.gameObject.SetActive(false);
+                    //__instance.m_publicPosition.gameObject.SetActive(false);
+            if (__instance.m_publicPosition.isOn)
+                __instance.m_publicPosition.isOn = false;
+            return false;
+        }
     }
 
     [HarmonyPatch(typeof(Minimap), "UpdateExplore")]
@@ -27,14 +34,13 @@ namespace MapSharingMadeEasy.Patches
         private static Stopwatch _stopwatch;
         private static bool explored = false;
 
-        static void Postfix(Player player, bool[] ___m_explored, Minimap __instance, Texture2D ___m_fogTexture,
-            List<Minimap.PinData> ___m_pins)
+        static void Postfix(Player player, Minimap __instance)
         {
             if (MapData.instance.SyncWith != null)
             {
                 Debug.Log($"Syncing Map with Map Table");
-                MapData.MergeWithSharedMap(player, __instance, ___m_fogTexture, MapData.instance.SyncWith, ___m_pins,
-                    ___m_explored);
+                MapData.MergeWithSharedMap(player, __instance, __instance.m_fogTexture, MapData.instance.SyncWith, __instance.m_pins,
+                    __instance.m_explored);
                 MapData.instance.ClearPendingSync();
                 return;
             }
@@ -42,10 +48,11 @@ namespace MapSharingMadeEasy.Patches
             if (MapData.instance.SyncData != null && MapData.instance.MapSender != "")
             {
                 PendingDataToMergeEvent(player);
-            } else if (MapData.instance.MapSender != "")
+            }
+            else if (MapData.instance.MapSender != "")
             {
                 Debug.Log("Map data had no sender. Rejecting.");
-                MapData.instance.ClearPendingSync(); 
+                MapData.instance.ClearPendingSync();
             }
 
             //Decline map data
@@ -58,7 +65,7 @@ namespace MapSharingMadeEasy.Patches
             //Accept map data
             if (Input.GetKeyDown(Settings.MapSettings.AcceptMapKey.Value))
             {
-                AcceptMap(player, ___m_explored, __instance, ___m_fogTexture, ___m_pins);
+                AcceptMap(player, __instance.m_explored, __instance, __instance.m_fogTexture, __instance.m_pins);
                 return;
             }
 
@@ -69,7 +76,7 @@ namespace MapSharingMadeEasy.Patches
 
             if (!sendMap && !sendPins) return;
 
-            SendData(sendMap, sendPins, player, ___m_explored, ___m_pins);
+            SendData(sendMap, sendPins, player, __instance.m_explored, __instance.m_pins);
         }
 
         private static void SendData(bool sendingMap, bool sendingPins, Player player, bool[] exploredData,
@@ -116,14 +123,15 @@ namespace MapSharingMadeEasy.Patches
 
             MapData.ParseReceivedMapData(MapData.instance.SyncData, out var sentFrom, out var sentTo,
                 out var pluginVersion, out var receivedPins, out var receivedMapData);
-            
+
             if (receivedMapData != null)
             {
                 Debug.Log($"MapSync::{MapData.instance.MapSender}'s map received and will be merged.");
                 var sw = new Stopwatch();
                 sw.Start();
                 var chunks = MapData.MergeMapData(exploredData, receivedMapData, out var mergedData);
-                Debug.Log($"Merged exploredData with receivedMapData - merged {chunks} chunks, resulting in mergedData: {mergedData.Length}");
+                Debug.Log(
+                    $"Merged exploredData with receivedMapData - merged {chunks} chunks, resulting in mergedData: {mergedData.Length}");
                 MapData.ExploreMap(minimap, fogTexture, mergedData);
                 sw.Stop();
                 Debug.Log($"Total millis to merge map: {sw.Elapsed.TotalMilliseconds}");
@@ -152,8 +160,9 @@ namespace MapSharingMadeEasy.Patches
             {
                 Debug.Log($"MapSync::Declined request from {MapData.instance.MapSender} to merge maps.");
                 player.Message(MessageHud.MessageType.Center,
-                    $"You decline the request from {MapData.instance.MapSender} to share their map with you.");     
+                    $"You decline the request from {MapData.instance.MapSender} to share their map with you.");
             }
+
             MapData.instance.ClearPendingSync();
         }
 
@@ -220,7 +229,7 @@ namespace MapSharingMadeEasy.Patches
 
                 for (var i = 0; i < m_explored.Length; i++)
                 {
-                    if (HookExplore.call_Explore(_instance, i % ySize, i / ySize))
+                    if (_instance.Explore(i % ySize, i / ySize))
                     {
                         exploredChunkCounter++;
                     }

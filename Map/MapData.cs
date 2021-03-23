@@ -31,7 +31,7 @@ namespace MapSharingMadeEasy
             sentFrom = "";
             sentTo = "";
             pluginVersion = "";
-            
+
             var splits = text.Split(':');
 
             if (splits.Length != 8)
@@ -48,7 +48,8 @@ namespace MapSharingMadeEasy
 
             if (pluginVersion != MapSharingMadeEasy.instance.PluginVersion)
             {
-                Debug.Log($"Data received from non-same Map Sharing Made Easy plugin version - {pluginVersion} vs {MapSharingMadeEasy.instance.PluginVersion}");
+                Debug.Log(
+                    $"Data received from non-same Map Sharing Made Easy plugin version - {pluginVersion} vs {MapSharingMadeEasy.instance.PluginVersion}");
                 Player.m_localPlayer.Message(MessageHud.MessageType.Center,
                     $"Data received from non-same Map Sharing Made Easy plugin version - {pluginVersion} vs {MapSharingMadeEasy.instance.PluginVersion}",
                     0);
@@ -243,7 +244,7 @@ namespace MapSharingMadeEasy
                 for (var i = 0; i < mapData.Length; i++)
                 {
                     if (!mapData[i]) continue;
-                    if (HookExplore.call_Explore(minimap, i % ySize, i / ySize))
+                    if (minimap.Explore(i % ySize, i / ySize))
                     {
                         exploredChunkCounter++;
                     }
@@ -295,8 +296,9 @@ namespace MapSharingMadeEasy
             {
                 sharedMapPins = myPins;
             }
-            
-            syncWith.SetMapData(GetMapDataString(player.GetPlayerName(), "AnyPlayer", true, true, mergedData, sharedMapPins));
+
+            syncWith.SetMapData(GetMapDataString(player.GetPlayerName(), "AnyPlayer", true, true, mergedData,
+                sharedMapPins));
 
             player.Message(MessageHud.MessageType.Center,
                 $"You copy the map and pins, then update it with your own discoveries.");
@@ -317,7 +319,8 @@ namespace MapSharingMadeEasy
                 true, p.Checked));
         }
 
-        public static void MergePinData(List<Minimap.PinData> pinsIn, List<Minimap.PinData> existingPins, Minimap minimap)
+        public static void MergePinData(List<Minimap.PinData> pinsIn, List<Minimap.PinData> existingPins,
+            Minimap minimap)
         {
             if (pinsIn == null || pinsIn.Count == 0) return;
 

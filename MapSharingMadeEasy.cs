@@ -8,23 +8,49 @@ using UnityEngine;
 
 namespace MapSharingMadeEasy
 {
-    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.1.0")]
+    class PieceInfo
+    {
+        public string PieceName;
+        public GameObject Prefab;
+        public string PieceTable;
+        public string CraftingStation;
+        public Dictionary<string, int> Resources;
+    }
+
+    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.2.1")]
     public class MapSharingMadeEasy : BaseUnityPlugin
     {
         private Dictionary<string, PieceInfo> PiecesToRegister = new Dictionary<string, PieceInfo>();
-        public string PluginVersion = "";
+        public static string PluginName = "none";
+        public string PluginVersion = "none";
         public static MapSharingMadeEasy instance;
         private static ConfigEntry<bool> modEnabled;
         private AssetBundle _assetBundle;
         private MapData _mapData;
 
-        private class PieceInfo
+        private void Awake()
         {
-            public string PieceName;
-            public GameObject Prefab;
-            public string PieceTable;
-            public string CraftingStation;
-            public Dictionary<string, int> Resources;
+            var execAssembly = Assembly.GetExecutingAssembly();
+            var names = execAssembly.GetManifestResourceNames();
+
+            var resName = names.First(n => n.Contains("mapsharingmadeeasy"));
+            var stream = execAssembly.GetManifestResourceStream(resName);
+            _assetBundle = AssetBundle.LoadFromStream(stream);
+
+            Initialize();
+
+            var bpp = (BepInPlugin) GetType().GetCustomAttributes(typeof(BepInPlugin), true)[0];
+            PluginVersion = bpp.Version.ToString();
+            PluginName = bpp.Name;
+            Debug.Log($"MapSharingMadeEasy Version: {PluginVersion}");
+            instance = this;
+            modEnabled = Config.Bind("General", "Enabled", true, "Enable this mod");
+            Settings.Init(Config);
+
+            if (!modEnabled.Value)
+                return;
+
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), null);
         }
 
         private void Initialize()
@@ -39,12 +65,16 @@ namespace MapSharingMadeEasy
             sharedMap.SetMapData("");
             sharedMap.transform.position = Vector3.zero;
             SharedMap.MapPrefab = mapPrefab;
+            var wnt = mapPrefab.GetComponent<WearNTear>();
+            if (wnt)
+                wnt.m_noSupportWear = false;
+
             _mapData = new MapData();
             var pi = new PieceInfo
             {
-                PieceName = mapPrefab.name, 
-                Prefab = mapPrefab, 
-                PieceTable = "_HammerPieceTable", 
+                PieceName = mapPrefab.name,
+                Prefab = mapPrefab,
+                PieceTable = "_HammerPieceTable",
                 CraftingStation = "piece_workbench",
                 Resources = new Dictionary<string, int> {{"DeerHide", 3}}
             };
@@ -147,34 +177,10 @@ namespace MapSharingMadeEasy
                 }
 
                 piece.m_resources = resources.ToArray();
-                
+
                 var otherPiece = pieceTable.m_pieces.Find(x => x.GetComponent<Piece>() != null).GetComponent<Piece>();
                 piece.m_placeEffect.m_effectPrefabs.AddRangeToArray(otherPiece.m_placeEffect.m_effectPrefabs);
             }
-        }
-
-        private void Awake()
-        {
-            var execAssembly = Assembly.GetExecutingAssembly();
-            var names = execAssembly.GetManifestResourceNames();
-
-            var resName = names.First(n => n.Contains("mapsharingmadeeasy"));
-            var stream = execAssembly.GetManifestResourceStream(resName);
-            _assetBundle = AssetBundle.LoadFromStream(stream);
-
-            Initialize();
-
-            var bpp = (BepInPlugin) GetType().GetCustomAttributes(typeof(BepInPlugin), true)[0];
-            PluginVersion = bpp.Version.ToString();
-            Debug.Log($"MapSharingMadeEasy Version: {PluginVersion}");
-            instance = this;
-            modEnabled = Config.Bind("General", "Enabled", true, "Enable this mod");
-            Settings.Init(Config);
-
-            if (!modEnabled.Value)
-                return;
-
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), null);
         }
     }
 }

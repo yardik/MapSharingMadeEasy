@@ -17,7 +17,7 @@ namespace MapSharingMadeEasy
             return $"{Name}\t{Pos}\t{Type}\t{Checked}\t{Animate}";
         }
     }
-    
+
     [Serializable]
     public struct SerializableVector3
     {

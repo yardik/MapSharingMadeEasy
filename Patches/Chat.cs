@@ -9,7 +9,7 @@ namespace MapSharingMadeEasy.Patches
         static bool Prefix(string text)
         {
             if (!text.StartsWith("MapData")) return true;
-            
+
             var validData = MapData.ParseReceivedMapData(text, out var sentFrom, out var sentTo, out var pluginVersion,
                 out var pins, out var mapData);
             if (validData)

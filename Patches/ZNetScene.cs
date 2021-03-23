@@ -7,10 +7,10 @@ namespace MapSharingMadeEasy.Patches
     [HarmonyPatch(typeof(ZNetScene), "Awake")]
     static class UpdateZNetScene_Prefabs
     {
-        static void Postfix(ZNetScene __instance, Dictionary<int, GameObject> ___m_namedPrefabs)
+        static void Postfix(ZNetScene __instance)
         {
             __instance.m_prefabs.Add(SharedMap.MapPrefab);
-            ___m_namedPrefabs.Add(Utils.GetStableHashCode(SharedMap.MapPrefab.name), SharedMap.MapPrefab);
+            __instance.m_namedPrefabs.Add(Utils.GetStableHashCode(SharedMap.MapPrefab.name), SharedMap.MapPrefab);
         }
     }
 }

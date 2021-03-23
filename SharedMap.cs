@@ -6,8 +6,8 @@ namespace MapSharingMadeEasy
     public class SharedMap : MonoBehaviour, Hoverable, Interactable
     {
         public static GameObject MapPrefab;
-        public string m_name = nameof (SharedMap);
-        public float m_useDistance = 2f;        
+        public string m_name = nameof(SharedMap);
+        public float m_useDistance = 2f;
         private const float m_minSitDelay = 2f;
         private string _mapData;
         private ZNetView m_nview;
@@ -29,7 +29,7 @@ namespace MapSharingMadeEasy
         }
 
         public string GetMapData() => m_nview.GetZDO().GetString("mapData", "");
-        
+
         public string GetHoverText()
         {
             return !InUseDistance(Player.m_localPlayer) ? "Too far to copy map." : "Copy map from table.";
@@ -44,13 +44,14 @@ namespace MapSharingMadeEasy
             Player player = human as Player;
             if (!InUseDistance(player))
                 return false;
-            
+
             Debug.Log($"Synchronizing map! Found {_mapData.Length} bytes");
             MapData.instance.SyncWith = this;
             return false;
         }
 
-        private bool InUseDistance(Humanoid human) => Vector3.Distance(human.transform.position, transform.position) < (double) m_useDistance;
+        private bool InUseDistance(Humanoid human) =>
+            Vector3.Distance(human.transform.position, transform.position) < (double) m_useDistance;
 
         public bool UseItem(Humanoid user, ItemDrop.ItemData item) => false;
 
@@ -58,7 +59,7 @@ namespace MapSharingMadeEasy
         {
             if (m_nview == null)
                 return;
-            
+
             m_nview.ClaimOwnership();
             m_nview.GetZDO().Set(nameof(mapData), mapData);
             _mapData = mapData;

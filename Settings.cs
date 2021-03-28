@@ -70,7 +70,7 @@ namespace MapSharingMadeEasy
                     "Allow players to enable their public locations?");
                 ConfigEntries.Add(nameof(AllowPublicLocations), AllowPublicLocations);
 
-                Debug.Log(
+                Utils.Log(
                     $"Loaded settings!\nSyncMapKey: {SyncMapKey.Value}\nAcceptMapKey:{AcceptMapKey.Value}\nRejectMapKey:{RejectMapKey.Value}\nSkipPinRange:{SkipPinRange.Value}");
             }
         }

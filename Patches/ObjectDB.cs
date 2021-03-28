@@ -10,7 +10,7 @@ namespace MapSharingMadeEasy.Patches
         {
             if (__instance.m_items.Count == 0 || __instance.GetItemPrefab("Amber") == null)
             {
-                Debug.Log("Waiting for game to initialize before adding prefabs.");
+                Utils.Log("Waiting for game to initialize before adding prefabs.");
                 return;
             }
 

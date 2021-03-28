@@ -11,11 +11,6 @@ namespace MapSharingMadeEasy
         public string Type;
         public bool Checked;
         public bool Animate;
-
-        public override string ToString()
-        {
-            return $"{Name}\t{Pos}\t{Type}\t{Checked}\t{Animate}";
-        }
     }
 
     [Serializable]

@@ -17,7 +17,7 @@ namespace MapSharingMadeEasy
         public Dictionary<string, int> Resources;
     }
 
-    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.2.1")]
+    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.3.0")]
     public class MapSharingMadeEasy : BaseUnityPlugin
     {
         private Dictionary<string, PieceInfo> PiecesToRegister = new Dictionary<string, PieceInfo>();
@@ -42,7 +42,7 @@ namespace MapSharingMadeEasy
             var bpp = (BepInPlugin) GetType().GetCustomAttributes(typeof(BepInPlugin), true)[0];
             PluginVersion = bpp.Version.ToString();
             PluginName = bpp.Name;
-            Debug.Log($"MapSharingMadeEasy Version: {PluginVersion}");
+            Utils.Log($"MapSharingMadeEasy Version: {PluginVersion}");
             instance = this;
             modEnabled = Config.Bind("General", "Enabled", true, "Enable this mod");
             Settings.Init(Config);
@@ -55,13 +55,13 @@ namespace MapSharingMadeEasy
 
         private void Initialize()
         {
-            Debug.Log($"Start debug");
+            Utils.Log($"Start debug");
             var mapPrefab = (GameObject) _assetBundle.LoadAsset("LargeMap", typeof(GameObject));
             var trophySprite = (Sprite) _assetBundle.LoadAsset("LargeMapSprite", typeof(Sprite));
-            Debug.Log($"TrophySprite: {trophySprite}");
+            Utils.Log($"TrophySprite: {trophySprite}");
 
             var sharedMap = mapPrefab.AddComponent<SharedMap>();
-            Debug.Log($"Map prefab is: {mapPrefab.name}");
+            Utils.Log($"Map prefab is: {mapPrefab.name}");
             sharedMap.SetMapData("");
             sharedMap.transform.position = Vector3.zero;
             SharedMap.MapPrefab = mapPrefab;

@@ -14,13 +14,13 @@ namespace MapSharingMadeEasy.Patches
                 out var pins, out var mapData);
             if (validData)
             {
-                Debug.Log($"Received map data from {sentFrom} via chat.");
+                Utils.Log($"Received map data from {sentFrom} via chat.");
                 MapData.instance.SyncData = text;
                 MapData.instance.MapSender = sentFrom;
             }
             else
             {
-                Debug.Log("MapData was invalid, ignoring.");
+                Utils.Log("MapData was invalid, ignoring.");
             }
 
             return false;

@@ -13,7 +13,7 @@ namespace MapSharingMadeEasy.Patches
         [HarmonyPatch("Awake")]
         public static void Postfix(ZNet __instance)
         {
-            Debug.Log("Patching Znet for configs");
+            Utils.Log("Patching Znet for configs");
             RegisterNewNetRPCs(__instance.m_routedRpc);
         }
 
@@ -37,16 +37,16 @@ namespace MapSharingMadeEasy.Patches
             var version = new object[] {instancePluginVersion};
             ZRpc.Serialize(version, ref zpg);
             zpg.SetPos(0);
-            Debug.Log($"Sending mod version {version} to client to be checked.");
+            Utils.Log($"Sending mod version {version} to client to be checked.");
             ZNet.instance.m_routedRpc.InvokeRoutedRPC(peerID, "CheckMapSharingModVersion", (object) zpg);
         }
 
         public static void RegisterNewNetRPCs(ZRoutedRpc zrpc)
         {
-            Debug.Log($"Registering server side and client side RPCs for Map Sharing Made Easy");
+            Utils.Log($"Registering server side and client side RPCs for Map Sharing Made Easy");
             if (zrpc == null)
             {
-                Debug.Log("No zrpc instance found");
+                Utils.Log("No zrpc instance found");
                 return;
             }
             
@@ -58,21 +58,21 @@ namespace MapSharingMadeEasy.Patches
         {
             if (ZNet.instance == null)
             {
-                Debug.Log("No ZNet instance found.");
+                Utils.Log("No ZNet instance found.");
                 return;
             }
 
             if (ZNet.instance.IsDedicated() || ZNet.instance.IsServer())
             {
-                Debug.Log("This is server. Don't run Client CheckModVersion");
+                Utils.Log("This is server. Don't run Client CheckModVersion");
                 return;
             }
 
             var serverVersion = (string)zpkg.ReadVariable(typeof(string));
-            Debug.Log($"Checking Map Sharing Made Easy Version: Server: {serverVersion} client {MapSharingMadeEasy.instance.PluginVersion}");
+            Utils.Log($"Checking Map Sharing Made Easy Version: Server: {serverVersion} client {MapSharingMadeEasy.instance.PluginVersion}");
             if (serverVersion != MapSharingMadeEasy.instance.PluginVersion)
             {
-                Debug.Log($"Wrong mod version detected for Map Sharing Made Easy: Server: {serverVersion} client {MapSharingMadeEasy.instance.PluginVersion}");
+                Utils.Log($"Wrong mod version detected for Map Sharing Made Easy: Server: {serverVersion} client {MapSharingMadeEasy.instance.PluginVersion}");
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"You must be running {serverVersion} of Map Sharing Made Easy to connect to this server.");
                 Game.instance.Logout();
             }
@@ -88,7 +88,7 @@ namespace MapSharingMadeEasy.Patches
             {
                 var config = Settings.MapSettings.ConfigEntries[configSetting.Key];
                 config.BoxedValue = zpkg.ReadVariable(configSetting.Value);
-                Debug.Log($"Server forced config: {configSetting.Key}: {config.BoxedValue}");
+                Utils.Log($"Server forced config: {configSetting.Key}: {config.BoxedValue}");
             }
         }
 
@@ -122,13 +122,13 @@ namespace MapSharingMadeEasy.Patches
         {
             if (!ZNet.instance.IsDedicated() || !ZNet.instance.IsServer())
                 return;
-            Debug.Log("Sending server side configs to client.");
+            Utils.Log("Sending server side configs to client.");
             ZPackage zpg = new ZPackage();
             var configSettings = Settings.MapSettings.ServerConfigs;
             var settings = new List<object>();
             foreach (var configSetting in configSettings)
             {
-                Debug.Log($"Forcing server config on client: {configSetting.Key}: {Settings.MapSettings.ConfigEntries[configSetting.Key].BoxedValue}");
+                Utils.Log($"Forcing server config on client: {configSetting.Key}: {Settings.MapSettings.ConfigEntries[configSetting.Key].BoxedValue}");
                 var settingsValue = Settings.MapSettings.ConfigEntries[configSetting.Key].BoxedValue;
                 settings.Add(settingsValue);
             }

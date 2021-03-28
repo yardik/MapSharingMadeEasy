@@ -35,7 +35,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="Map\ExtendedPinData.cs" />
         <Compile Include="Map\MapData.cs" />
+        <Compile Include="Map\PlayerSyncData.cs" />
         <Compile Include="Map\SavedPinData.cs" />
         <Compile Include="Patches\Chat.cs" />
         <Compile Include="Patches\Minimap.cs" />
@@ -103,7 +105,9 @@
       <!--Exec Command="$(ILMergeConsolePath) /out:bin\Debug\MapSharingMadeEasy_merged.dll bin\Debug\ModConfigEnforcer.dll bin\Debug\MapSharingMadeEasy.dll" /-->
       <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Valheim_Debug\BepInEx\plugins" />
       <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />
+      <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Valheim_Debug\BepInEx\plugins" />
       <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll \\shar-pc\D\SteamLibrary\steamapps\common\Valheim\BepInEx\plugins" />
+      <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim_dedicated\BepInEx\plugins" />
     </Target>
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
       <PropertyGroup>

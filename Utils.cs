@@ -25,6 +25,24 @@ namespace MapSharingMadeEasy
 
             return num1 + num2 * 1566083941;
         }
+        
+        public static string GetWhatData(bool map, bool pins)
+        {
+            if (map && pins)
+            {
+                return "map and pins";
+            }
+            else if (map)
+            {
+                return "map";
+            }
+            else if (pins)
+            {
+                return "pins";
+            }
+
+            return "";
+        }
 
         public static string DecompressString(string compressedText)
         {
@@ -61,12 +79,38 @@ namespace MapSharingMadeEasy
 
             if (!added)
             {
-                Debug.Log($"Adding missing recipe to pieces");
+                Log($"Adding missing recipe to pieces");
                 pieces.Add(toAdd);
                 return true;
             }
 
             return false;
+        }
+
+        public static void Log(string message)
+        {
+            Debug.Log($"MapSharingMadeEasy::{message}");
+        }
+    }
+    
+    public static class SerializeExtension
+    {
+        public static string SerializeList(this Dictionary<string, PlayerSyncData> data)
+        {
+            var memoryStream = new MemoryStream();
+            var binaryFormatter = new BinaryFormatter();
+            binaryFormatter.Serialize(memoryStream, data);
+            var outpd = Convert.ToBase64String(memoryStream.ToArray());
+            return outpd;
+        }
+        
+        public static string SerializeList(this Dictionary<string, ExtendedPinData> data)
+        {
+            var memoryStream = new MemoryStream();
+            var binaryFormatter = new BinaryFormatter();
+            binaryFormatter.Serialize(memoryStream, data);
+            var outpd = Convert.ToBase64String(memoryStream.ToArray());
+            return outpd;
         }
     }
 }

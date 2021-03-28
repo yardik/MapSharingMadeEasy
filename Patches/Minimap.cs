@@ -38,7 +38,7 @@ namespace MapSharingMadeEasy.Patches
         {
             if (MapData.instance.SyncWith != null)
             {
-                Debug.Log($"Syncing Map with Map Table");
+                Utils.Log($"Syncing Map with Map Table");
                 MapData.MergeWithSharedMap(player, __instance, __instance.m_fogTexture, MapData.instance.SyncWith, __instance.m_pins,
                     __instance.m_explored);
                 MapData.instance.ClearPendingSync();
@@ -51,7 +51,7 @@ namespace MapSharingMadeEasy.Patches
             }
             else if (MapData.instance.MapSender != "")
             {
-                Debug.Log("Map data had no sender. Rejecting.");
+                Utils.Log("Map data had no sender. Rejecting.");
                 MapData.instance.ClearPendingSync();
             }
 
@@ -85,7 +85,7 @@ namespace MapSharingMadeEasy.Patches
             if (sendingMap && Settings.MapSettings.SendPinShares.Value)
                 sendingPins = true;
 
-            Debug.Log("MapSync::Sending data to character nearby.");
+            Utils.Log("Sending data to character nearby.");
             Stopwatch sw = new Stopwatch();
             sw.Start();
             var chars = new List<Character>();
@@ -95,10 +95,10 @@ namespace MapSharingMadeEasy.Patches
             {
                 var toPlr = ((Player) chars[0]);
                 var toPlrName = toPlr.GetPlayerName().Replace("[", "").Replace("]", "");
-                Debug.Log($"MapSync::Sending data to {toPlr.GetPlayerName()}");
+                Utils.Log($"Sending data to {toPlr.GetPlayerName()}");
 
                 player.Message(MessageHud.MessageType.Center,
-                    $"You let {toPlrName} copy your {GetWhatData(sendingMap, sendingPins)}.");
+                    $"You let {toPlrName} copy your {Utils.GetWhatData(sendingMap, sendingPins)}.");
 
                 var mapDataString = MapData.GetMapDataString(player.GetPlayerName(), toPlrName, sendingMap, sendingPins,
                     exploredData, pins);
@@ -109,7 +109,7 @@ namespace MapSharingMadeEasy.Patches
             }
 
             sw.Stop();
-            Debug.Log($"Total millis to send: {sw.Elapsed.TotalMilliseconds}");
+            Utils.Log($"Total millis to send: {sw.Elapsed.TotalMilliseconds}");
         }
 
         private static void AcceptMap(Player player, bool[] exploredData, Minimap minimap, Texture2D fogTexture,
@@ -126,19 +126,19 @@ namespace MapSharingMadeEasy.Patches
 
             if (receivedMapData != null)
             {
-                Debug.Log($"MapSync::{MapData.instance.MapSender}'s map received and will be merged.");
+                Utils.Log($"{MapData.instance.MapSender}'s map received and will be merged.");
                 var sw = new Stopwatch();
                 sw.Start();
                 var chunks = MapData.MergeMapData(exploredData, receivedMapData, out var mergedData);
-                Debug.Log(
+                Utils.Log(
                     $"Merged exploredData with receivedMapData - merged {chunks} chunks, resulting in mergedData: {mergedData.Length}");
                 MapData.ExploreMap(minimap, fogTexture, mergedData);
                 sw.Stop();
-                Debug.Log($"Total millis to merge map: {sw.Elapsed.TotalMilliseconds}");
+                Utils.Log($"Total millis to merge map: {sw.Elapsed.TotalMilliseconds}");
             }
             else
             {
-                Debug.Log("Null received exploration data, nothing to merge there.");
+                Utils.Log("Null received exploration data, nothing to merge there.");
             }
 
             if (receivedPins != null && receivedPins.Count > 0 && Settings.MapSettings.AcceptPinShares.Value)
@@ -148,7 +148,7 @@ namespace MapSharingMadeEasy.Patches
                 var pinsIn = MapData.CreatePinsFromSavedPinData(receivedPins);
                 MapData.MergePinData(pinsIn, pins, minimap);
                 sw.Stop();
-                Debug.Log($"Total millis to merge pins: {sw.Elapsed.TotalMilliseconds}");
+                Utils.Log($"Total millis to merge pins: {sw.Elapsed.TotalMilliseconds}");
             }
 
             MapData.instance.ClearPendingSync();
@@ -158,7 +158,7 @@ namespace MapSharingMadeEasy.Patches
         {
             if (MapData.instance.SyncData != "")
             {
-                Debug.Log($"MapSync::Declined request from {MapData.instance.MapSender} to merge maps.");
+                Utils.Log($"Declined request from {MapData.instance.MapSender} to merge maps.");
                 player.Message(MessageHud.MessageType.Center,
                     $"You decline the request from {MapData.instance.MapSender} to share their map with you.");
             }
@@ -171,7 +171,7 @@ namespace MapSharingMadeEasy.Patches
             //If map data came from this character - ignore it!
             if (player.GetPlayerName().Replace("[", "").Replace("]", "").Equals(MapData.instance.MapSender))
             {
-                Debug.Log("This is my own mapdata - ignore it.");
+                Utils.Log("This is my own mapdata - ignore it.");
                 MapData.instance.ClearPendingSync();
                 return;
             }
@@ -179,7 +179,7 @@ namespace MapSharingMadeEasy.Patches
             //Prompt to accept map data periodically
             if (_stopwatch == null || _stopwatch.Elapsed.Seconds > 2 || !_stopwatch.IsRunning)
             {
-                Debug.Log($"MapSync::MapData Found from {MapData.instance.MapSender} - posting message.");
+                Utils.Log($"MapData Found from {MapData.instance.MapSender} - posting message.");
                 player.Message(MessageHud.MessageType.Center,
                     $"{MapData.instance.MapSender} wants to share their map. ({Settings.MapSettings.AcceptMapKey.Value.ToString()} to accept, {Settings.MapSettings.RejectMapKey.Value.ToString()} to decline).");
                 _stopwatch = new Stopwatch();
@@ -187,43 +187,25 @@ namespace MapSharingMadeEasy.Patches
             }
         }
 
-        private static string GetWhatData(bool map, bool pins)
-        {
-            if (map && pins)
-            {
-                return "map and pins";
-            }
-            else if (map)
-            {
-                return "map";
-            }
-            else if (pins)
-            {
-                return "pins";
-            }
-
-            return "";
-        }
-
         static void GenerateTestData(bool[] m_explored, Minimap _instance, Texture2D m_fogTexture,
             List<Minimap.PinData> m_pins)
         {
-            Debug.Log("Generating test data...");
+            Utils.Log("Generating test data...");
             var ySize = _instance.m_textureSize;
 
             if (!explored)
             {
                 var exploredChunkCounter = 0;
-                Debug.Log($"MapSync::Discover whole map");
+                Utils.Log($"Discover whole map");
                 if (_instance == null)
                 {
-                    Debug.Log("_instance is null");
+                    Utils.Log("_instance is null");
                     return;
                 }
 
                 if (m_explored == null)
                 {
-                    Debug.Log("m_explored is null");
+                    Utils.Log("m_explored is null");
                     return;
                 }
 
@@ -259,19 +241,19 @@ namespace MapSharingMadeEasy.Patches
         static void ClearTestData(bool[] m_explored, Minimap _instance, Texture2D m_fogTexture,
             List<Minimap.PinData> m_pins)
         {
-            Debug.Log("Clearing test data...");
+            Utils.Log("Clearing test data...");
             var ySize = _instance.m_textureSize;
 
-            Debug.Log($"MapSync::Undiscover whole map");
+            Utils.Log($"Undiscover whole map");
             if (_instance == null)
             {
-                Debug.Log("_instance is null");
+                Utils.Log("_instance is null");
                 return;
             }
 
             if (m_explored == null)
             {
-                Debug.Log("m_explored is null");
+                Utils.Log("m_explored is null");
                 return;
             }
 

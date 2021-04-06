@@ -1,9 +1,10 @@
 using HarmonyLib;
 using UnityEngine;
 
+/*
 namespace MapSharingMadeEasy.Patches
 {
-    [HarmonyPatch(typeof(Chat), "OnNewChatMessage")]
+    //[HarmonyPatch(typeof(Chat), "OnNewChatMessage")]
     static class OnNewChatMessage_Patch
     {
         static bool Prefix(string text)
@@ -27,3 +28,4 @@ namespace MapSharingMadeEasy.Patches
         }
     }
 }
+*/

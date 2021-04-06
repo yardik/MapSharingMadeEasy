@@ -52,6 +52,7 @@ namespace MapSharingMadeEasy.Patches
             
             zrpc.Register("SetMapSharingConfigValues", new Action<long, ZPackage>(RPC_ClientSetConfigValues));
             zrpc.Register("CheckMapSharingModVersion", new Action<long, ZPackage>(RPC_ClientCheckModVersion));
+            zrpc.Register("ReceiveMapData", new Action<long, ZPackage>(MapTransfer.RPC_ReceiveMapData));
         }
 
         private static void RPC_ClientCheckModVersion(long sender, ZPackage zpkg)
@@ -92,7 +93,7 @@ namespace MapSharingMadeEasy.Patches
             }
         }
 
-        private static object ReadVariable(this ZPackage zp, Type t)
+        public static object ReadVariable(this ZPackage zp, Type t)
         {
             if (t == typeof(int))
                 return zp.ReadInt();

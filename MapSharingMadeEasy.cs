@@ -17,7 +17,7 @@ namespace MapSharingMadeEasy
         public Dictionary<string, int> Resources;
     }
 
-    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.3.0")]
+    [BepInPlugin("yardik.MapSharingMadeEasy", "Map Sharing Made Easy", "2.4.0")]
     public class MapSharingMadeEasy : BaseUnityPlugin
     {
         private Dictionary<string, PieceInfo> PiecesToRegister = new Dictionary<string, PieceInfo>();

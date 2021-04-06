@@ -21,7 +21,6 @@ namespace MapSharingMadeEasy.Patches
             if (Settings.MapSettings.AllowPublicLocations.Value) return true;
             if (__instance.m_publicPosition.transform.parent != null)
                 __instance.m_publicPosition.transform.parent.gameObject.SetActive(false);
-                    //__instance.m_publicPosition.gameObject.SetActive(false);
             if (__instance.m_publicPosition.isOn)
                 __instance.m_publicPosition.isOn = false;
             return false;
@@ -95,7 +94,7 @@ namespace MapSharingMadeEasy.Patches
             {
                 var toPlr = ((Player) chars[0]);
                 var toPlrName = toPlr.GetPlayerName().Replace("[", "").Replace("]", "");
-                Utils.Log($"Sending data to {toPlr.GetPlayerName()}");
+                Utils.Log($"Sending data to {toPlr.GetPlayerName()}:{toPlr.GetPlayerID()}");
 
                 player.Message(MessageHud.MessageType.Center,
                     $"You let {toPlrName} copy your {Utils.GetWhatData(sendingMap, sendingPins)}.");
@@ -103,9 +102,8 @@ namespace MapSharingMadeEasy.Patches
                 var mapDataString = MapData.GetMapDataString(player.GetPlayerName(), toPlrName, sendingMap, sendingPins,
                     exploredData, pins);
 
-                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody, "ChatMessage",
-                    (object) player.transform.position, (object) 2, (object) player.GetPlayerName(),
-                    (object) mapDataString);
+                var serverPeer = ZNet.instance.GetServerPeer();
+                MapTransfer.SendMapDataToClient(serverPeer.m_uid, mapDataString);
             }
 
             sw.Stop();

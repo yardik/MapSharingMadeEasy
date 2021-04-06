@@ -57,7 +57,7 @@ namespace MapSharingMadeEasy
                 return false;
             }
 
-            if (!sentTo.Equals(Player.m_localPlayer.GetPlayerName()) && !sentTo.Equals("AnyPlayer"))
+            if (!ZNet.instance.IsServer() && !sentTo.Equals(Player.m_localPlayer.GetPlayerName()) && !sentTo.Equals("AnyPlayer"))
             {
                 Utils.Log("This data is for another player.");
                 return false;
@@ -372,8 +372,7 @@ namespace MapSharingMadeEasy
                 Utils.Log($"No last player sync for {Player.m_localPlayer.GetPlayerName()}");
             }
             
-            //Delete any pins from incoming data player has removed since last sync - from the shared map pins dict and list
-            Dictionary<string, Minimap.PinData> playerPinsToRemove; 
+            //Delete any pins from incoming data player has removed since last sync - from the shared map pins dict and list             
             DeleteRemovedPinsFromSharedMap(lastSyncDate, sharedMapPins, sharedMapPinsDict, playerPinsDict, extendedPinDatas);
             DeleteRemovedPinsFromPlayer(playerPinsDict, extendedPinDatas, minimap);
             

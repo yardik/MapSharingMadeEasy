@@ -37,6 +37,7 @@
     <ItemGroup>
         <Compile Include="Map\ExtendedPinData.cs" />
         <Compile Include="Map\MapData.cs" />
+        <Compile Include="Map\MapTransfer.cs" />
         <Compile Include="Map\PlayerSyncData.cs" />
         <Compile Include="Map\SavedPinData.cs" />
         <Compile Include="Patches\Chat.cs" />
@@ -74,8 +75,11 @@
       <Reference Include="0Harmony, Version=2.3.2.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Libs\0Harmony.dll</HintPath>
       </Reference>
+      <Reference Include="assembly_utils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>F:\Steam\steamapps\common\Valheim_dedicated\valheim_server_Data\Managed\assembly_utils.dll</HintPath>
+      </Reference>
       <Reference Include="assembly_valheim, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\Libs\assembly_valheim_publicized.dll</HintPath>
+        <HintPath>F:\Steam\steamapps\common\Valheim\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx, Version=5.4.8.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Libs\BepInEx.dll</HintPath>
@@ -102,6 +106,7 @@
       </Reference>
     </ItemGroup>
     <Target Name="AfterBuild">
+        <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim_dedicated\BepInEx\plugins" />
       <!--Exec Command="$(ILMergeConsolePath) /out:bin\Debug\MapSharingMadeEasy_merged.dll bin\Debug\ModConfigEnforcer.dll bin\Debug\MapSharingMadeEasy.dll" /-->
       <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Valheim_Debug\BepInEx\plugins" />
       <Exec Command="copy bin\Debug\MapSharingMadeEasy.dll F:\Steam\steamapps\common\Valheim\BepInEx\plugins" />

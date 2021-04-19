@@ -25,6 +25,7 @@ namespace MapSharingMadeEasy
         public string PluginVersion = "none";
         public static MapSharingMadeEasy instance;
         private static ConfigEntry<bool> modEnabled;
+        private static ConfigEntry<int> nexusID;
         private AssetBundle _assetBundle;
         private MapData _mapData;
 
@@ -45,6 +46,7 @@ namespace MapSharingMadeEasy
             Utils.Log($"MapSharingMadeEasy Version: {PluginVersion}");
             instance = this;
             modEnabled = Config.Bind("General", "Enabled", true, "Enable this mod");
+            nexusID = Config.Bind("General", "NexusID", 300, "Nexus mod ID for updates");
             Settings.Init(Config);
 
             if (!modEnabled.Value)

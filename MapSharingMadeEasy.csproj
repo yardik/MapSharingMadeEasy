@@ -43,6 +43,7 @@
         <Compile Include="Patches\Chat.cs" />
         <Compile Include="Patches\Minimap.cs" />
         <Compile Include="Patches\ObjectDB.cs" />
+        <Compile Include="Patches\Player.cs" />
         <Compile Include="Patches\ZNet.cs" />
         <Compile Include="Patches\ZNetScene.cs" />
         <Compile Include="Settings.cs" />
@@ -100,6 +101,9 @@
       </Reference>
       <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>F:\Steam\steamapps\common\Valheim\unstripped_corlib\UnityEngine.InputLegacyModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Libs\UnityEngine.PhysicsModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>F:\Steam\steamapps\common\Valheim\unstripped_corlib\UnityEngine.UI.dll</HintPath>
